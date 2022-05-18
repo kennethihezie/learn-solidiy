@@ -1,3 +1,4 @@
+//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
 contract LanguageExt{
@@ -6,14 +7,14 @@ contract LanguageExt{
     //fixed array
     uint[2] public fixedArr = [1, 2];
 
-    constructor () public {
+    constructor(){
         myArray.push(1);
         myArray.push(2);
         myArray.push(3);
         myArray.push(4);
     }
 
-    function getAllElement() public view returns(uint[], uint[2]) {
+    function getAllElement() public view returns(uint[] memory, uint[2] memory) {
         return (myArray, fixedArr);
     }
 
@@ -51,3 +52,44 @@ contract LanguageExt{
 //     uint value;
 // }
 //Enums
+
+
+//Understanding Memory and storage
+contract Numbers{
+    //all top levels variables are storage variables
+    int[] public numbers;
+
+    constructor(){
+        numbers.push(20);
+        numbers.push(32);
+
+        changeArray(numbers);
+    }
+
+    //this method is not view cus we are  modifying myArray in the contract...we are using storage keyword
+    function storageFunc() public {
+        //when using the storage keyword here it makes the myArray variable
+        //point directly to storage location the numbers variables is pointing at
+        int[] storage myArray = numbers;
+        //the below line will change the value of numbers[0] which is 20 to 1 cause myArray
+        //is pointing to the same location.
+        myArray[0] = 1;
+    }
+
+    //this method is view cus we are not modifying anything in the contract...we are using memory keyword
+    function memoryFunc() public view {
+        //when using memory keyword solidity create a seprate location
+        //and copy the data to it. myArray now points to seprate location created by solidity
+        int[] memory myArray = numbers;
+        //the below line won't change the value of numbers[0] which is 20 to 1 cause myArray
+        //is pointing to a different location.
+        myArray[0] = 1;
+        //remeber memory gets dumps once the function exits
+    }
+
+    //this method is view cus we are not modifying anything in the contract...we are using memory keyword
+    //why we care about storage and memory
+    function changeArray(int[] memory array) private pure {
+       array[0] = 1;
+    }
+}
