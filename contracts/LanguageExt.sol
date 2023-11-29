@@ -1,6 +1,19 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.12;
 
+// public - all can access
+
+// external - Cannot be accessed internally, only externally
+
+// internal - only this contract and contracts deriving from it can access
+
+// private - can be accessed only from this contract
+
+// As for best practices, you should use external if you expect
+// that the function will only ever be called externally, and use
+// public if you need to call the function internally. Reason because
+// public function consume more gas than external functions
+
 contract LanguageExt{
     //dynamic array
     uint[] public myArray;
